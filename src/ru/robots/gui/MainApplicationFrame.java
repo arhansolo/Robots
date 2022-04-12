@@ -2,6 +2,7 @@ package ru.robots.gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.*;
@@ -47,7 +48,7 @@ public class MainApplicationFrame extends JFrame {
 
     protected GameWindow createGameWindow() {
         GameWindow gameWindow = new GameWindow();
-        gameWindow.setLocation(10,10);
+        gameWindow.setLocation(230,10);
         gameWindow.setSize(400,  400);
         //setMinimumSize(gameWindow.getMinimumSize());
         //gameWindow.pack();
@@ -58,34 +59,4 @@ public class MainApplicationFrame extends JFrame {
         desktopPane.add(frame);
         frame.setVisible(true);
     }
-    
-//    protected JMenuBar createMenuBar() {
-//        JMenuBar menuBar = new JMenuBar();
-//
-//        //Set up the lone menu.
-//        JMenu menu = new JMenu("Document");
-//        menu.setMnemonic(KeyEvent.VK_D);
-//        menuBar.add(menu);
-//
-//        //Set up the first menu item.
-//        JMenuItem menuItem = new JMenuItem("New");
-//        menuItem.setMnemonic(KeyEvent.VK_N);
-//        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-//                KeyEvent.VK_N, ActionEvent.ALT_MASK));
-//        menuItem.setActionCommand("new");
-////        menuItem.addActionListener(this);
-//        menu.add(menuItem);
-//
-//        //Set up the second menu item.
-//        menuItem = new JMenuItem("Quit");
-//        menuItem.setMnemonic(KeyEvent.VK_Q);
-//        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-//                KeyEvent.VK_Q, ActionEvent.ALT_MASK));
-//        menuItem.setActionCommand("quit");
-////        menuItem.addActionListener(this);
-//        menu.add(menuItem);
-//
-//        return menuBar;
-//    }
-
 }

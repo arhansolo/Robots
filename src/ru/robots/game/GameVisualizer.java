@@ -54,7 +54,7 @@ public class GameVisualizer extends JPanel
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                setTargetPosition(e.getPoint());
+                setTargetPosition(e.getLocationOnScreen());
                 repaint();
             }
         });
@@ -113,7 +113,6 @@ public class GameVisualizer extends JPanel
         }
 
         return Math.min(value, max);
-
 
     }
     
@@ -192,3 +191,7 @@ public class GameVisualizer extends JPanel
         drawOval(g, x, y, 5, 5);
     }
 }
+// перенести рисование в отдельный класс
+// mvp
+// составить план на 6 тасков
+// presenter события, отрисовка
