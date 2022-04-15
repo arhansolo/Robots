@@ -1,6 +1,7 @@
 package ru.robots.gui;
 
 import ru.robots.log.Logger;
+import static ru.robots.gui.GUIConstants.*;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -12,8 +13,8 @@ public class MenuBar extends JFrame {
     public JMenuBar generateMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
-        JMenu lookAndFeelMenu = generateLookAndFeelMenu();
-        JMenu testMenu = generateTestMenu();
+        JMenu lookAndFeelMenu = generateMenu(NAME_OF_LAF_MENU, KeyEvent.VK_V, DESCRIPTION_OF_LAF_MENU);
+        JMenu testMenu = generateMenu(NAME_OF_TEST_MENU, KeyEvent.VK_T, DESCRIPTION_OF_TEST_MENU);
 
         addItemToTestMenu(testMenu);
         addItemToLookAndFeelMenu(lookAndFeelMenu);
@@ -23,33 +24,24 @@ public class MenuBar extends JFrame {
         return menuBar;
     }
 
-    private JMenu generateLookAndFeelMenu ()
+    private JMenu generateMenu(String nameOfMenu, int keyEventCode, String accessibleDescription)
     {
-        JMenu lookAndFeelMenu = new JMenu("Режим отображения");
-        lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
-        lookAndFeelMenu.getAccessibleContext().setAccessibleDescription(
-                "Управление режимом отображения приложения");
-        return lookAndFeelMenu;
-    }
-
-    private JMenu generateTestMenu ()
-    {
-        JMenu testMenu = new JMenu("Тесты");
-        testMenu.setMnemonic(KeyEvent.VK_T);
-        testMenu.getAccessibleContext().setAccessibleDescription("Тестовые команды");
-        return testMenu;
+        JMenu menu = new JMenu(nameOfMenu);
+        menu.setMnemonic(keyEventCode);
+        menu.getAccessibleContext().setAccessibleDescription(accessibleDescription);
+        return menu;
     }
 
     private void addItemToLookAndFeelMenu (JMenu lookAndFeelMenu) {
 
-        JMenuItem systemLookAndFeel = new JMenuItem("Системная схема", KeyEvent.VK_S);
+        JMenuItem systemLookAndFeel = new JMenuItem(SYS_SCHEME, KeyEvent.VK_S);
         systemLookAndFeel.addActionListener((event) -> {
             setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             mainApplicationFrame.invalidate();
         });
 
 
-        JMenuItem crossplatformLookAndFeel = new JMenuItem("Универсальная схема", KeyEvent.VK_S);
+        JMenuItem crossplatformLookAndFeel = new JMenuItem(UNI_SCHEME, KeyEvent.VK_S);
         crossplatformLookAndFeel.addActionListener((event) -> {
             setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             mainApplicationFrame.invalidate();
@@ -78,33 +70,4 @@ public class MenuBar extends JFrame {
             // just ignore
         }
     }
-
-    //    protected JMenuBar createMenuBar() {
-//        JMenuBar menuBar = new JMenuBar();
-//
-//        //Set up the lone menu.
-//        JMenu menu = new JMenu("Document");
-//        menu.setMnemonic(KeyEvent.VK_D);
-//        menuBar.add(menu);
-//
-//        //Set up the first menu item.
-//        JMenuItem menuItem = new JMenuItem("New");
-//        menuItem.setMnemonic(KeyEvent.VK_N);
-//        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-//                KeyEvent.VK_N, ActionEvent.ALT_MASK));
-//        menuItem.setActionCommand("new");
-////        menuItem.addActionListener(this);
-//        menu.add(menuItem);
-//
-//        //Set up the second menu item.
-//        menuItem = new JMenuItem("Quit");
-//        menuItem.setMnemonic(KeyEvent.VK_Q);
-//        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-//                KeyEvent.VK_Q, ActionEvent.ALT_MASK));
-//        menuItem.setActionCommand("quit");
-////        menuItem.addActionListener(this);
-//        menu.add(menuItem);
-//
-//        return menuBar;
-//    }
 }
