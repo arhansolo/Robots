@@ -1,14 +1,17 @@
-package ru.robots.gui;
+package ru.robots.gui.guiElements;
 
-import java.awt.BorderLayout;
-import static ru.robots.gui.GUIConstants.*;
+import ru.robots.gui.gameView.GameVisualizer;
 
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
+import java.awt.*;
+
+import static ru.robots.gui.guiElements.GUIConstants.*;
+
+import javax.swing.*;
 
 public class GameWindow extends JInternalFrame
 {
     private final GameVisualizer m_visualizer;
+
     public GameWindow() {
         super(NAME_OF_GAME_WINDOW, true, true, true, true);
         m_visualizer = new GameVisualizer();

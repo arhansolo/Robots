@@ -1,4 +1,4 @@
-package ru.robots.gui;
+package ru.robots.gui.guiElements;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;

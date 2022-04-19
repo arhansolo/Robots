@@ -1,7 +1,7 @@
-package ru.robots.gui;
+package ru.robots.gui.guiElements;
 
 import ru.robots.log.Logger;
-import static ru.robots.gui.GUIConstants.*;
+import static ru.robots.gui.guiElements.GUIConstants.*;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;

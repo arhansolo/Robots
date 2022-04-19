@@ -1,4 +1,4 @@
-package ru.robots.gui;
+package ru.robots.gui.guiElements;
 
 public class GUIConstants {
     public static final String NAME_OF_LAF_MENU = "Режим отображения";

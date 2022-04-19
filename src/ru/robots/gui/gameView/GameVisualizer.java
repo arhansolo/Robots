@@ -1,24 +1,20 @@
-package ru.robots.gui;
+package ru.robots.gui.gameView;
 
 import ru.robots.game.Robot;
 import ru.robots.game.Target;
-import ru.robots.gui.gameView.RobotDrawer;
-import ru.robots.gui.gameView.TargetDrawer;
+import ru.robots.presenter.GamePresenter;
 
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.AffineTransform;
+import java.awt.event.*;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
-public class GameVisualizer extends JPanel
+public class  GameVisualizer extends JPanel
 {
     private final Timer m_timer = initTimer();
 
@@ -26,8 +22,11 @@ public class GameVisualizer extends JPanel
         return new Timer("events generator", true);
     }
 
-    volatile Robot robot = new Robot();
-    volatile Target target = new Target();
+    private final GamePresenter gamePresenter = new GamePresenter();
+    private final Robot player = gamePresenter.getPlayer();
+    private final Robot bot = gamePresenter.getBot();
+    private final Target target = gamePresenter.getTarget();
+
     RobotDrawer robotDrawer = new RobotDrawer();
     TargetDrawer targetDrawer = new TargetDrawer();
 
@@ -40,49 +39,46 @@ public class GameVisualizer extends JPanel
             {
                 onRedrawEvent();
             }
-        }, 0, 50);
+        }, 0, 10);
         m_timer.schedule(new TimerTask()
         {
             @Override
             public void run()
             {
-                onModelUpdateEvent();
+                gamePresenter.onModelUpdateEvent();
             }
         }, 0, 10);
         addMouseListener(new MouseAdapter()
-
         {
             @Override
             public void mouseClicked(MouseEvent e)
             {
                 target.setTargetPosition(e.getPoint());
                 repaint();
+        }
+        });
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                System.out.println(e.getPoint());
             }
         });
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                //gamePresenter.moveRobotUsingKeyboard(e.getKeyCode());
+            }
+        });
+
+        setFocusable(true);
+        requestFocusInWindow();
         setDoubleBuffered(true);
     }
 
     
-    protected void onRedrawEvent()
-    {
+    protected void onRedrawEvent() {
         EventQueue.invokeLater(this::repaint);
     }
-
-    protected void onModelUpdateEvent()
-    {
-        double[] velocities = robot.computeVelocities(target.getM_targetPositionX(), target.getM_targetPositionY());
-        if (velocities == null) {
-            return;
-        }
-
-        if (robot.isOutOfBorders())
-        {
-            robot.setDefaultPosition();
-            target.setDefaultTargetPosition();
-        }
-        robot.moveRobot(velocities[0], velocities[1], 10);
-    }
-
     
     private static int round(double value) {
         return (int)(value + 0.5);
@@ -92,11 +88,8 @@ public class GameVisualizer extends JPanel
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D)g;
-        robotDrawer.drawRobot(g2d, round(robot.getM_robotPositionX()), round(robot.getM_robotPositionY()), robot.getM_robotDirection(), robot);
+        robotDrawer.drawRobot(g2d, round(player.getM_robotPositionX()), round(player.getM_robotPositionY()), player.getM_robotDirection(), player);
+        robotDrawer.drawRobot(g2d, round(bot.getM_robotPositionX()), round(bot.getM_robotPositionY()), bot.getM_robotDirection(), bot);
         targetDrawer.drawTarget(g2d, target.getM_targetPositionX(), target.getM_targetPositionY());
     }
 }
-// перенести рисование в отдельный класс
-// mvp
-// составить план на 6 тасков
-// presenter события, отрисовка

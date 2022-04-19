@@ -1,5 +1,7 @@
 package ru.robots.gui;
 
+import ru.robots.gui.guiElements.MainApplicationFrame;
+
 import java.awt.Frame;
 
 import javax.swing.SwingUtilities;
