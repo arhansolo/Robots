@@ -47,7 +47,7 @@ public class MainApplicationFrame extends JFrame {
     protected GameWindow createGameWindow() {
         GameWindow gameWindow = new GameWindow();
         gameWindow.setLocation(230,10);
-        gameWindow.setSize(400,  400);
+        gameWindow.setSize(1000,  1000);
         //setMinimumSize(gameWindow.getMinimumSize());
         //gameWindow.pack();
         return gameWindow;

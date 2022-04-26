@@ -2,7 +2,7 @@ package ru.robots.gui.gameView;
 
 import java.awt.*;
 
-abstract class Drawer {
+public class Drawer {
     public static int round(double value) {
         return (int)(value + 0.5);
     }

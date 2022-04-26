@@ -13,10 +13,6 @@ public class GameParams {
 
     public static final double minFieldCoordinateY = 0;
 
-//    public static final int targetStartPositionX = 100;
-//
-//    public static final int targetStartPositionY = 100;
-
     public static final Map<Integer, Integer> moveDirectionMap = new HashMap<>();
 
     public GameParams(){

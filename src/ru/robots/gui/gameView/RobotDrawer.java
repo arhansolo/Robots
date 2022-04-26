@@ -5,7 +5,9 @@ import ru.robots.game.Robot;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-public class RobotDrawer extends Drawer{
+import static ru.robots.gui.gameView.Drawer.*;
+
+public class RobotDrawer{
 
     public void drawRobot(Graphics2D g, int x, int y, double direction, Robot robot) {
         int robotCenterX = round(robot.getM_robotPositionX());
@@ -21,5 +23,4 @@ public class RobotDrawer extends Drawer{
         g.setColor(Color.BLACK);
         drawOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
     }
-
 }

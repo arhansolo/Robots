@@ -1,63 +1,76 @@
 package ru.robots.presenter;
 
-import ru.robots.game.Bot;
-import ru.robots.game.Player;
+import ru.robots.game.*;
 import ru.robots.game.Robot;
-import ru.robots.game.Target;
+import ru.robots.gui.gameView.GameVisualizer;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.TimerTask;
 
-import static ru.robots.game.GameParams.moveDirectionMap;
+import static ru.robots.game.MathCalculator.angleTo;
 
 public class GamePresenter {
 
-    private final Robot player = new Player();
-    private final Target target = new Target();
-    private final Robot bot = new Bot();
-
-    public Robot getPlayer() {
-        return player;
+    public GamePresenter(GameVisualizer visualizer){
+        visualizer.addMouseMotionEventListener(this::setNewRobotDirection);
+        visualizer.addKeyPressedEventListener(this::setNewKeyDir);
+        visualizer.addKeyReleasedEventListener(this::cancelNewKeyDir);
+        visualizer.addTaskOnUpdatePanel(new TimerTask() {
+            @Override
+            public void run() {
+                updateModel();
+            }
+        });
     }
 
-    public Robot getBot() {
-        return bot;
+    private GameState gameState = new GameState();
+
+    public void updateModel(){
+        gameState.updateGameState();
     }
 
-    public Target getTarget() {
-        return target;
+    public void setNewKeyDir(KeyEvent event){
+        int keyCode = event.getKeyCode();
+        setNewRobotMovingDirection(keyCode, true);
+        gameState.setPlayerCommand(new PlayerHandler(gameState));
     }
 
-    public void onModelUpdateEvent() {
-        player.setVelocities(0.1, 0.001);
-        bot.setVelocities(0.05, 0.001);
-
-        if (player.isOutOfBorders()) {
-            player.setRobotPosition(100,100,0);
-            player.setVelocities(0, 0);
-            target.setTargetPosition(100,100);
-        }
-        if (bot.isOutOfBorders()) {
-            bot.setRobotPosition(50,50,0);
-            bot.setVelocities(0, 0);
-        }
-        player.moveRobot(target.getM_targetPositionX(), target.getM_targetPositionY(), 10);
-        bot.moveRobot(player.getM_robotPositionX(), player.getM_robotPositionY(), 10);
+    public void cancelNewKeyDir(KeyEvent event){
+        int keyCode = event.getKeyCode();
+        setNewRobotMovingDirection(keyCode, false);
+        gameState.setPlayerCommand(new PlayerHandler(gameState));
     }
 
-    public void moveRobotUsingKeyboard (int keyCode){
+    private void setNewRobotMovingDirection(int keyCode, boolean status){
+        KeyboardParams keyboardParams = getKeyboardParams();
         switch (keyCode) {
-            case 68 -> {
-                player.setRobotPosition(player.getM_robotPositionX() + 3, player.getM_robotPositionY(), 0);
-            }
-            case 65 -> {
-                player.setRobotPosition(player.getM_robotPositionX() - 3, player.getM_robotPositionY(), 0);
-            }
-            case 83 -> {
-                player.setRobotPosition(player.getM_robotPositionX(), player.getM_robotPositionY() + 3, 0);
-            }
-            case 87 -> {
-                player.setRobotPosition(player.getM_robotPositionX(), player.getM_robotPositionY() - 3, 0);
-            }
+            case 68 -> keyboardParams.setRight(status);
+            case 65 -> keyboardParams.setLeft(status);
+            case 83 -> keyboardParams.setUp(status);
+            case 87 -> keyboardParams.setDown(status);
         }
+        gameState.setKeyboardParams(keyboardParams);
+    }
+
+    public void setNewRobotDirection(MouseEvent event){
+        Point mousePosition = event.getPoint();
+        Robot player = getPlayer();
+        double angle = angleTo(player.getM_robotPositionX(), player.getM_robotPositionY(), mousePosition.x, mousePosition.y);
+        player.setRobotPosition(player.getM_robotPositionX(), player.getM_robotPositionY(), angle);
+        gameState.setBotCommand(new BotHandler(gameState));
+    }
+
+    public Robot getPlayer(){
+        return gameState.getPlayer();
+    }
+
+    public KeyboardParams getKeyboardParams(){
+        return gameState.getKeyboardParams();
+    }
+
+    public Robot getBot(){
+        return gameState.getBot();
     }
 }
