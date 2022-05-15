@@ -7,6 +7,7 @@ import ru.robots.gui.gameView.GameVisualizer;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.TimerTask;
 
 import static ru.robots.game.MathCalculator.angleTo;
@@ -15,6 +16,7 @@ public class GamePresenter {
 
     public GamePresenter(GameVisualizer visualizer){
         visualizer.addMouseMotionEventListener(this::setNewRobotDirection);
+        visualizer.addMouseEventListener(this::setNewMouseClicked);
         visualizer.addKeyPressedEventListener(this::setNewKeyDir);
         visualizer.addKeyReleasedEventListener(this::cancelNewKeyDir);
         visualizer.addTaskOnUpdatePanel(new TimerTask() {
@@ -43,6 +45,20 @@ public class GamePresenter {
         gameState.setPlayerCommand(new PlayerHandler(gameState));
     }
 
+    public void setNewMouseClicked (MouseEvent event){
+        Bullet bullet = new Bullet(getPlayer().getM_robotPositionX(), getPlayer().getM_robotPositionY(), getPlayer().getM_robotDirection());
+        bullet.setAngle(getPlayer().getM_robotDirection());
+
+        ArrayList<Bullet> bulletArrayList = getBulletArrayList();
+        bulletArrayList.add(bullet);
+
+        //MouseParams mouseParams = getMouseParams();
+        //mouseParams.setClicked(true);
+        //gameState.setMouseParams(mouseParams);
+        
+        gameState.setBulletCommand(new BulletHandler(gameState));
+    }
+
     private void setNewRobotMovingDirection(int keyCode, boolean status){
         KeyboardParams keyboardParams = getKeyboardParams();
         switch (keyCode) {
@@ -66,8 +82,16 @@ public class GamePresenter {
         return gameState.getPlayer();
     }
 
+    public ArrayList<Bullet> getBulletArrayList() {
+        return gameState.getBulletArrayList();
+    }
+
     public KeyboardParams getKeyboardParams(){
         return gameState.getKeyboardParams();
+    }
+
+    public MouseParams getMouseParams () {
+        return gameState.getMouseParams();
     }
 
     public Robot getBot(){

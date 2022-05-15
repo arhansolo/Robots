@@ -1,5 +1,6 @@
 package ru.robots.gui.gameView;
 
+import ru.robots.game.Bullet;
 import ru.robots.game.Robot;
 import ru.robots.presenter.GamePresenter;
 
@@ -7,6 +8,7 @@ import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
@@ -22,6 +24,7 @@ public class  GameVisualizer extends JPanel
     }
 
     RobotDrawer robotDrawer = new RobotDrawer();
+    BulletDrawer bulletDrawer = new BulletDrawer();
 
     public GameVisualizer() {
         gamePresenter = new GamePresenter(this);
@@ -48,7 +51,6 @@ public class  GameVisualizer extends JPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 listener.accept(e);
-                repaint();
             }
         });
     }
@@ -95,7 +97,11 @@ public class  GameVisualizer extends JPanel
 
         Robot player = gamePresenter.getPlayer();
         Robot bot = gamePresenter.getBot();
+        ArrayList<Bullet> bulletArrayList = gamePresenter.getBulletArrayList();
 
+        for (Bullet bullet: bulletArrayList){
+            bulletDrawer.drawBullet(g2d, round(bullet.getM_bulletPositionX()), round(bullet.getM_bulletPositionY()), bullet.getM_bulletDirection(), bullet);
+        }
         robotDrawer.drawRobot(g2d, round(player.getM_robotPositionX()), round(player.getM_robotPositionY()), player.getM_robotDirection(), player);
         robotDrawer.drawRobot(g2d, round(bot.getM_robotPositionX()), round(bot.getM_robotPositionY()), bot.getM_robotDirection(), bot);
 
