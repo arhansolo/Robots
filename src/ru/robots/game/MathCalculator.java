@@ -1,5 +1,7 @@
 package ru.robots.game;
 
+import ru.robots.game.gameObjects.Robot;
+
 public class MathCalculator {
     public static double asNormalizedRadians(double angle) {
         while (angle < 0) {
@@ -33,14 +35,14 @@ public class MathCalculator {
         return asNormalizedRadians(Math.atan2(diffY, diffX));
     }
 
-    public static double[] computeVelocities(Robot robot, double m_targetPositionX, double m_targetPositionY)
+    public static double[] computeVelocities(Robot robot, double targetPositionX, double targetPositionY)
     {
-        double m_robotPositionX = robot.getM_robotPositionX();
-        double m_robotPositionY = robot.getM_robotPositionY();
-        double m_robotDirection = robot.getM_robotDirection();
+        double robotPositionX = robot.getX();
+        double robotPositionY = robot.getY();
+        double robotDirection = robot.getDirection();
 
-        double distance = MathCalculator.distance(m_targetPositionX, m_targetPositionY,
-                m_robotPositionX, m_robotPositionY);
+        double distance = MathCalculator.distance(targetPositionX, targetPositionY,
+                robotPositionX, robotPositionY);
         if (distance < 0.5) {
             return null;
         }
@@ -48,13 +50,13 @@ public class MathCalculator {
         double velocity = robot.getMaxVelocity();
         double maxAngularVelocity = robot.getMaxAngularVelocity();
 
-        double angleToTarget = MathCalculator.angleTo(m_robotPositionX, m_robotPositionY, m_targetPositionX, m_targetPositionY);
+        double angleToTarget = MathCalculator.angleTo(robotPositionX, robotPositionY, targetPositionX, targetPositionY);
         double angularVelocity = 0;
 
-        if (angleToTarget > m_robotDirection) {
+        if (angleToTarget > robotDirection) {
             angularVelocity = maxAngularVelocity;
         }
-        if (angleToTarget < m_robotDirection) {
+        if (angleToTarget < robotDirection) {
             angularVelocity = -maxAngularVelocity;
         }
 

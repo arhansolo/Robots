@@ -1,4 +1,4 @@
-package ru.robots.game;
+package ru.robots.game.inputDevicesHandlers;
 
 public class MouseParams {
     public MouseParams(boolean isClicked){

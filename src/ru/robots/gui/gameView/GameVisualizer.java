@@ -1,7 +1,7 @@
 package ru.robots.gui.gameView;
 
-import ru.robots.game.Bullet;
-import ru.robots.game.Robot;
+import ru.robots.game.gameObjects.Bullet;
+import ru.robots.game.gameObjects.Robot;
 import ru.robots.presenter.GamePresenter;
 
 import java.awt.EventQueue;
@@ -71,7 +71,7 @@ public class  GameVisualizer extends JPanel
                 listener.accept(e);
             }
         });
-    }
+    } //Баг с Caps
 
     public void addKeyReleasedEventListener(Consumer<KeyEvent> listener){
         addKeyListener(new KeyAdapter() {
@@ -100,10 +100,9 @@ public class  GameVisualizer extends JPanel
         ArrayList<Bullet> bulletArrayList = gamePresenter.getBulletArrayList();
 
         for (Bullet bullet: bulletArrayList){
-            bulletDrawer.drawBullet(g2d, round(bullet.getM_bulletPositionX()), round(bullet.getM_bulletPositionY()), bullet.getM_bulletDirection(), bullet);
+            bulletDrawer.drawBullet(g2d, round(bullet.getX()), round(bullet.getY()), bullet.getDirection(), bullet);
         }
-        robotDrawer.drawRobot(g2d, round(player.getM_robotPositionX()), round(player.getM_robotPositionY()), player.getM_robotDirection(), player);
-        robotDrawer.drawRobot(g2d, round(bot.getM_robotPositionX()), round(bot.getM_robotPositionY()), bot.getM_robotDirection(), bot);
-
+        robotDrawer.drawRobot(g2d, round(player.getX()), round(player.getY()), player.getDirection(), player);
+        robotDrawer.drawRobot(g2d, round(bot.getX()), round(bot.getY()), bot.getDirection(), bot);
     }
 }

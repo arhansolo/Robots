@@ -1,7 +1,15 @@
 package ru.robots.presenter;
 
 import ru.robots.game.*;
-import ru.robots.game.Robot;
+import ru.robots.game.gameObjects.Bullet;
+import ru.robots.game.gameObjects.Robot;
+import ru.robots.game.handlers.BotHandler;
+import ru.robots.game.handlers.BulletHandler;
+import ru.robots.game.handlers.PlayerHandler;
+import static ru.robots.game.constants.GameConstants.*;
+
+import ru.robots.game.inputDevicesHandlers.KeyboardParams;
+import ru.robots.game.inputDevicesHandlers.MouseParams;
 import ru.robots.gui.gameView.GameVisualizer;
 
 import java.awt.*;
@@ -17,8 +25,8 @@ public class GamePresenter {
     public GamePresenter(GameVisualizer visualizer){
         visualizer.addMouseMotionEventListener(this::setNewRobotDirection);
         visualizer.addMouseEventListener(this::setNewMouseClicked);
-        visualizer.addKeyPressedEventListener(this::setNewKeyDir);
-        visualizer.addKeyReleasedEventListener(this::cancelNewKeyDir);
+        visualizer.addKeyPressedEventListener(this::setNewKeyPressed);
+        visualizer.addKeyReleasedEventListener(this::setNewKeyReleased);
         visualizer.addTaskOnUpdatePanel(new TimerTask() {
             @Override
             public void run() {
@@ -27,27 +35,30 @@ public class GamePresenter {
         });
     }
 
-    private GameState gameState = new GameState();
+    private final GameState gameState = new GameState();
 
     public void updateModel(){
         gameState.updateGameState();
     }
 
-    public void setNewKeyDir(KeyEvent event){
+    public void setNewKeyPressed(KeyEvent event){
         int keyCode = event.getKeyCode();
         setNewRobotMovingDirection(keyCode, true);
-        gameState.setPlayerCommand(new PlayerHandler(gameState));
+
+        gameState.getHandlerMap().put(PLAYER_HANDLER_NAME, new PlayerHandler(gameState));
     }
 
-    public void cancelNewKeyDir(KeyEvent event){
+    public void setNewKeyReleased(KeyEvent event){
         int keyCode = event.getKeyCode();
         setNewRobotMovingDirection(keyCode, false);
-        gameState.setPlayerCommand(new PlayerHandler(gameState));
+
+        PlayerHandler playerHandler = new PlayerHandler(gameState);
+        gameState.getHandlerMap().put(PLAYER_HANDLER_NAME, new PlayerHandler(gameState));
     }
 
     public void setNewMouseClicked (MouseEvent event){
-        Bullet bullet = new Bullet(getPlayer().getM_robotPositionX(), getPlayer().getM_robotPositionY(), getPlayer().getM_robotDirection());
-        bullet.setAngle(getPlayer().getM_robotDirection());
+        Bullet bullet = new Bullet(getPlayer().getX(), getPlayer().getY(), getPlayer().getDirection());
+        bullet.setDirection(getPlayer().getDirection());
 
         ArrayList<Bullet> bulletArrayList = getBulletArrayList();
         bulletArrayList.add(bullet);
@@ -55,8 +66,8 @@ public class GamePresenter {
         //MouseParams mouseParams = getMouseParams();
         //mouseParams.setClicked(true);
         //gameState.setMouseParams(mouseParams);
-        
-        gameState.setBulletCommand(new BulletHandler(gameState));
+
+        gameState.getHandlerMap().put(BULLET_HANDLER_NAME, new BulletHandler(gameState));
     }
 
     private void setNewRobotMovingDirection(int keyCode, boolean status){
@@ -66,6 +77,7 @@ public class GamePresenter {
             case 65 -> keyboardParams.setLeft(status);
             case 83 -> keyboardParams.setUp(status);
             case 87 -> keyboardParams.setDown(status);
+            case 16 -> keyboardParams.setDash(status);
         }
         gameState.setKeyboardParams(keyboardParams);
     }
@@ -73,17 +85,18 @@ public class GamePresenter {
     public void setNewRobotDirection(MouseEvent event){
         Point mousePosition = event.getPoint();
         Robot player = getPlayer();
-        double angle = angleTo(player.getM_robotPositionX(), player.getM_robotPositionY(), mousePosition.x, mousePosition.y);
-        player.setRobotPosition(player.getM_robotPositionX(), player.getM_robotPositionY(), angle);
-        gameState.setBotCommand(new BotHandler(gameState));
+        double angle = angleTo(player.getX(), player.getY(), mousePosition.x, mousePosition.y);
+        player.setDirection(angle);
+
+        gameState.getHandlerMap().put(BOT_HANDLER_NAME, new BotHandler(gameState));
     }
 
     public Robot getPlayer(){
-        return gameState.getPlayer();
+        return gameState.getGameObjectData().getPlayer();
     }
 
     public ArrayList<Bullet> getBulletArrayList() {
-        return gameState.getBulletArrayList();
+        return gameState.getGameObjectData().getBulletArrayList();
     }
 
     public KeyboardParams getKeyboardParams(){
@@ -95,6 +108,6 @@ public class GamePresenter {
     }
 
     public Robot getBot(){
-        return gameState.getBot();
+        return gameState.getGameObjectData().getBot();
     }
 }
