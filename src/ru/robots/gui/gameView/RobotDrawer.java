@@ -1,6 +1,6 @@
 package ru.robots.gui.gameView;
 
-import ru.robots.game.Robot;
+import ru.robots.game.gameObjects.Robot;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -10,8 +10,8 @@ import static ru.robots.gui.gameView.Drawer.*;
 public class RobotDrawer{
 
     public void drawRobot(Graphics2D g, int x, int y, double direction, Robot robot) {
-        int robotCenterX = round(robot.getM_robotPositionX());
-        int robotCenterY = round(robot.getM_robotPositionY());
+        int robotCenterX = round(robot.getX());
+        int robotCenterY = round(robot.getY());
         AffineTransform t = AffineTransform.getRotateInstance(direction, robotCenterX, robotCenterY);
         g.setTransform(t);
         g.setColor(Color.MAGENTA);

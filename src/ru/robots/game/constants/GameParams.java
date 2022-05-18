@@ -1,4 +1,4 @@
-package ru.robots.game;
+package ru.robots.game.constants;
 
 import java.util.HashMap;
 import java.util.Map;
