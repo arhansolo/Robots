@@ -2,16 +2,15 @@ package ru.robots.game.handlers;
 
 import ru.robots.game.GameObjectData;
 import ru.robots.game.GameState;
+import ru.robots.game.commands.KeyboardCommand;
 import ru.robots.game.inputDevicesHandlers.KeyboardParams;
 import ru.robots.game.gameObjects.Robot;
 
-import static ru.robots.game.commands.KeyboardCommand.moveRobotUsingKeyboard;
-
-public class PlayerHandler extends Handler {
-    //private final GameState gameState;
+public class PlayerHandler implements KeyboardCommand {
+    private final GameState gameState;
 
     public PlayerHandler(GameState gameState) {
-        super(gameState);
+        this.gameState = gameState;
     }
 
     @Override

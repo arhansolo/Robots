@@ -14,14 +14,16 @@ import java.util.Map;
 public class GameState {
     private final GameObjectData gameObjectData;
 
-    private final Map<String, Command<GameObjectData>> handlerMap;
+    private final Map<String, Command> handlerMap;
 
     private KeyboardParams keyboardParams;
     private MouseParams mouseParams;
 
     public GameState(){
-        Robot player = new Robot(100, 100, 0);
-        Robot bot = new Robot(0, 0, 0);
+        GameObjectGenerator gameObjectGenerator = new GameObjectGenerator();
+
+        Robot player = new Robot(100, 100, 0, 30, 20, true);
+        ArrayList<Robot> bots = gameObjectGenerator.generateBots();
         ArrayList<Bullet> bulletArrayList = new ArrayList<Bullet>();
 
         handlerMap = new HashMap<>();
@@ -29,20 +31,20 @@ public class GameState {
         handlerMap.put(BOT_HANDLER_NAME, null);
         handlerMap.put(BULLET_HANDLER_NAME, null);
 
-        gameObjectData = new GameObjectData(player, bot, bulletArrayList);
+        gameObjectData = new GameObjectData(player, bots, bulletArrayList);
         keyboardParams = new KeyboardParams(false, false, false, false, false);
         //mouseParams = new MouseParams(false);
     }
 
     public void updateGameState(){
-        for (Command<GameObjectData> value : handlerMap.values()) {
-            if (value != null){
-                value.handleCommand(gameObjectData);
+        for (Command handler : handlerMap.values()) {
+            if (handler != null){
+                handler.handleCommand(gameObjectData);
             }
         }
     }
 
-    public Map<String, Command<GameObjectData>> getHandlerMap() {
+    public Map<String, Command> getHandlerMap() {
         return handlerMap;
     }
 

@@ -57,7 +57,7 @@ public class GamePresenter {
     }
 
     public void setNewMouseClicked (MouseEvent event){
-        Bullet bullet = new Bullet(getPlayer().getX(), getPlayer().getY(), getPlayer().getDirection());
+        Bullet bullet = new Bullet(getPlayer().getX(), getPlayer().getY(), getPlayer().getDirection(), 6, 3, getPlayer());
         bullet.setDirection(getPlayer().getDirection());
 
         ArrayList<Bullet> bulletArrayList = getBulletArrayList();
@@ -107,7 +107,7 @@ public class GamePresenter {
         return gameState.getMouseParams();
     }
 
-    public Robot getBot(){
-        return gameState.getGameObjectData().getBot();
+    public ArrayList<Robot> getBotArrayList(){
+        return gameState.getGameObjectData().getBotArrayList();
     }
 }

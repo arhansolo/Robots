@@ -14,4 +14,12 @@ public class Drawer {
     public static void drawOval(Graphics g, int centerX, int centerY, int diam1, int diam2) {
         g.drawOval(centerX - diam1 / 2, centerY - diam2 / 2, diam1, diam2);
     }
+
+    public static void fillHitBox(Graphics g, int x, int y, int w, int h){
+        g.fillRect(x, y, w, h);
+    }
+
+    public static void drawHitBox(Graphics g, int x, int y, int w, int h) {
+        g.drawRect(x, y, w, h);
+    }
 }

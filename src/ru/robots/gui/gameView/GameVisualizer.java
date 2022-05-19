@@ -1,18 +1,20 @@
 package ru.robots.gui.gameView;
 
+import lombok.SneakyThrows;
 import ru.robots.game.gameObjects.Bullet;
 import ru.robots.game.gameObjects.Robot;
 import ru.robots.presenter.GamePresenter;
 
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class  GameVisualizer extends JPanel
@@ -85,24 +87,33 @@ public class  GameVisualizer extends JPanel
     protected void onRedrawEvent() {
         EventQueue.invokeLater(this::repaint);
     }
-    
-    private static int round(double value) {
-        return (int)(value + 0.5);
-    }
-    
+
+    @SneakyThrows
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D)g;
 
         Robot player = gamePresenter.getPlayer();
-        Robot bot = gamePresenter.getBot();
+        ArrayList<Robot> bots = gamePresenter.getBotArrayList();
         ArrayList<Bullet> bulletArrayList = gamePresenter.getBulletArrayList();
 
+//        Shape hb = player.getGameObjectHitBox();
+//        g2d.setColor(Color.BLACK);
+//        g2d.fill(hb);
+//        g2d.draw(hb); //Checking HitBox drawing
+
+//        File file = new File("asset/player.png");
+//        BufferedImage image = ImageIO.read(file);
+//        g2d.drawImage(image, null, (int)player.getX(), (int)player.getY());
+
+
         for (Bullet bullet: bulletArrayList){
-            bulletDrawer.drawBullet(g2d, round(bullet.getX()), round(bullet.getY()), bullet.getDirection(), bullet);
+            bulletDrawer.drawBullet(g2d, bullet);
         }
-        robotDrawer.drawRobot(g2d, round(player.getX()), round(player.getY()), player.getDirection(), player);
-        robotDrawer.drawRobot(g2d, round(bot.getX()), round(bot.getY()), bot.getDirection(), bot);
+        for (Robot bot: bots){
+            robotDrawer.drawRobot(g2d, bot);
+        }
+        robotDrawer.drawRobot(g2d, player);
     }
 }

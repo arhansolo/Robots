@@ -7,12 +7,12 @@ import java.util.ArrayList;
 
 public class GameObjectData {
     private final Robot player;
-    private final Robot bot;
+    private final ArrayList<Robot> bots;
     private final ArrayList<Bullet> bulletArrayList;
 
-    public GameObjectData (Robot player, Robot bot, ArrayList<Bullet> bulletArrayList){
+    public GameObjectData (Robot player, ArrayList<Robot> bots, ArrayList<Bullet> bulletArrayList){
         this.player = player;
-        this.bot = bot;
+        this.bots = bots;
         this.bulletArrayList = bulletArrayList;
     }
 
@@ -20,8 +20,8 @@ public class GameObjectData {
         return player;
     }
 
-    public Robot getBot() {
-        return bot;
+    public ArrayList<Robot> getBotArrayList() {
+        return bots;
     }
 
     public ArrayList<Bullet> getBulletArrayList() {

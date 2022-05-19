@@ -2,32 +2,39 @@ package ru.robots.game.handlers;
 
 import ru.robots.game.GameObjectData;
 import ru.robots.game.GameState;
-import ru.robots.game.commands.Command;
 import ru.robots.game.commands.MoveCommand;
-import ru.robots.game.gameObjects.GameObject;
+import ru.robots.game.gameObjects.Bullet;
 import ru.robots.game.gameObjects.Robot;
 
-import static ru.robots.game.commands.MoveCommand.moveRobot;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-public class BotHandler extends Handler {
-    //private final GameState gameState;
+public class BotHandler implements MoveCommand{
+    private final GameState gameState;
 
     public BotHandler(GameState gameState) {
-        super(gameState);
+        this.gameState = gameState;
     }
 
     @Override
     public void handleCommand(GameObjectData gameObjectData) {
-        Robot robot = gameObjectData.getBot();
+        ArrayList<Robot> bots = gameObjectData.getBotArrayList();
         Robot player = gameState.getGameObjectData().getPlayer();
 
-        robot.setVelocities(0.05, 0.001);
-        if (robot.isOutOfBorders()) {
-            robot.setPosition(50,50);
-            robot.setDirection(0);
-            robot.setVelocities(0, 0);
-        }
+        for (int i = 0; i < bots.size();i++){
+            Robot bot = bots.get(i);
 
-        moveRobot(robot, player.getX(), player.getY(), 10);
+            if (bot.getHp() <= 0){
+                bots.remove(bot);
+            }
+
+            bot.setVelocities(0.05, 0.001);
+            if (bot.isOutOfBorders()) {
+                bot.setPosition(50,50);
+                bot.setDirection(0);
+                bot.setVelocities(0, 0);
+            }
+            moveRobot(bot, player.getX(), player.getY(), 10);
+        }
     }
 }

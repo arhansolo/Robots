@@ -2,6 +2,8 @@ package ru.robots.game.gameObjects;
 
 public class Robot extends GameObject{
 
+    private final boolean isPlayer;
+
     private double maxVelocity;
     private double maxAngularVelocity;
 
@@ -10,10 +12,11 @@ public class Robot extends GameObject{
 
     private final double dashDistance = 40;
 
-    public Robot(double x, double y, double direction) {
-        super(x, y, direction);
+    public Robot(double x, double y, double direction, double w, double h, boolean isPlayer) {
+        super(x, y, direction, w, h);
         this.hp = 100;
         this.abilityCharge = 3;
+        this.isPlayer = isPlayer;
     }
 
     public void setVelocities (double velocity, double angularVelocity){
@@ -27,6 +30,10 @@ public class Robot extends GameObject{
 
     public void setAbilityCharge (int abilityCharge){
         this.abilityCharge = abilityCharge;
+    }
+
+    public boolean isPlayer() {
+        return isPlayer;
     }
 
     public double getMaxVelocity() {

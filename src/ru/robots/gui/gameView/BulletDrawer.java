@@ -8,15 +8,19 @@ import java.awt.geom.AffineTransform;
 import static ru.robots.gui.gameView.Drawer.*;
 
 public class BulletDrawer {
-    public void drawBullet(Graphics2D g, int x, int y, double direction, Bullet bullet) {
+    public void drawBullet(Graphics2D g, Bullet bullet) {
+        double direction = bullet.getDirection();
         int bulletCenterX = round(bullet.getX());
         int bulletCenterY = round(bullet.getY());
         AffineTransform t = AffineTransform.getRotateInstance(direction, bulletCenterX, bulletCenterY);
         g.setTransform(t);
+        bulletCenterX -= round(bullet.getWidth()/2);
+        bulletCenterY -= round(bullet.getHeight()/2);
+
+        fillHitBox(g, bulletCenterX, bulletCenterY, round(bullet.getWidth()), round(bullet.getHeight()));
         g.setColor(Color.BLACK);
-        fillOval(g, bulletCenterX, bulletCenterY, 10, 5);
+        drawHitBox(g, bulletCenterX, bulletCenterY, round(bullet.getWidth()), round(bullet.getHeight()));
         g.setColor(Color.BLACK);
-        drawOval(g, bulletCenterX, bulletCenterY, 10, 5);
-        g.setColor(Color.BLACK);
+
     }
 }
