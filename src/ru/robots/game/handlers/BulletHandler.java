@@ -7,6 +7,7 @@ import ru.robots.game.gameObjects.Robot;
 import ru.robots.game.inputDevicesHandlers.MouseParams;
 import ru.robots.game.gameObjects.Bullet;
 
+import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -24,11 +25,11 @@ public class BulletHandler implements ShootCommand {
         ArrayList<Bullet> bulletArrayList = gameObjectData.getBulletArrayList();
         MouseParams mouseParams = gameState.getMouseParams();
 
-        for (Iterator<Bullet> it = bulletArrayList.iterator(); it.hasNext(); ) {
-            Bullet bullet = it.next();
+        for (int i = 0; i<bulletArrayList.size(); i++){
+            Bullet bullet = bulletArrayList.get(i); //баг с ConcEx
 
             if (bullet.isOutOfDistanceOfAction() || isHit(bullet, gameObjectData)){
-                it.remove();
+                bulletArrayList.remove(bullet);
             }
             shoot(bullet, mouseParams, gameState.getGameObjectData().getPlayer());
         }
@@ -36,17 +37,19 @@ public class BulletHandler implements ShootCommand {
 
     public boolean isHit(Bullet bullet, GameObjectData gameObjectData){
         ArrayList<Robot> bots = gameObjectData.getBotArrayList();
-        Area bulletArea = new Area(bullet.getGameObjectHitBox());
+        //Area bulletArea = new Area(bullet.getGameObjectHitBox());
+        Shape bulletBounds = bullet.getGameObjectHitBox().getBounds2D();
 
         for (Iterator<Robot> it = bots.iterator(); it.hasNext(); ) {
             Robot bot = it.next();
 
             //bullet.getX() == bot.getX() && bullet.getY() == bot.getY()
-            bulletArea.intersect(new Area(bot.getGameObjectHitBox())); //bulletArea.isEmpty()
-            //посмотреть другие способы отслеживания регистрации попадания + баг с ConcEx
+            //bulletArea.intersect(new Area(bot.getGameObjectHitBox())); //bulletArea.isEmpty()
+            //посмотреть другие способы отслеживания регистрации попадания
 
-            if (bullet.getGameObjectHitBox().getBounds2D().intersects(bot.getGameObjectHitBox().getBounds2D())){
-                bot.setHp(bot.getHp() - 50);
+            if (bulletBounds.intersects(bot.getGameObjectHitBox().getBounds2D())
+                    && !(bullet.getBulletSender() == bot)){
+                bot.setHp(bot.getHp() - bullet.getBulletDamage());
                 return true;
             }
         }

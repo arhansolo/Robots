@@ -1,4 +1,5 @@
 package ru.robots.game.gameObjects;
+import static ru.robots.game.constants.BulletList.*;
 
 public class Robot extends GameObject{
 
@@ -9,11 +10,13 @@ public class Robot extends GameObject{
 
     private int hp;
     private int abilityCharge;
+    private String typeOfGun;
 
     private final double dashDistance = 40;
 
     public Robot(double x, double y, double direction, double w, double h, boolean isPlayer) {
         super(x, y, direction, w, h);
+        this.typeOfGun = PISTOL;
         this.hp = 100;
         this.abilityCharge = 3;
         this.isPlayer = isPlayer;
@@ -32,6 +35,10 @@ public class Robot extends GameObject{
         this.abilityCharge = abilityCharge;
     }
 
+    public void setTypeOfGun(String typeOfGun) {
+        this.typeOfGun = typeOfGun;
+    }
+
     public boolean isPlayer() {
         return isPlayer;
     }
@@ -46,6 +53,10 @@ public class Robot extends GameObject{
 
     public int getHp() {
         return hp;
+    }
+
+    public String getTypeOfGun() {
+        return typeOfGun;
     }
 
     public int getAbilityCharge() {

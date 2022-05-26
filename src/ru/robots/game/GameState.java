@@ -22,7 +22,7 @@ public class GameState {
     public GameState(){
         GameObjectGenerator gameObjectGenerator = new GameObjectGenerator();
 
-        Robot player = new Robot(100, 100, 0, 30, 20, true);
+        Robot player = gameObjectGenerator.generatePlayer();
         ArrayList<Robot> bots = gameObjectGenerator.generateBots();
         ArrayList<Bullet> bulletArrayList = new ArrayList<Bullet>();
 

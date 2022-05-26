@@ -1,18 +1,24 @@
 package ru.robots.game.gameObjects;
 
 public class Bullet extends GameObject{
-    private double bulletVelocity = 10;
-    private final double distanceToLive = 500;
+    private final double bulletVelocity;
+    private final double distanceToLive;
 
-    private Robot bulletSender;
+    private final Robot bulletSender;
 
     private String typeOfBullet;
     private double coveredDistance;
 
-    public Bullet (double x, double y, double direction, double w, double h, Robot bulletSender) {
+    private final int bulletDamage;
+
+    public Bullet (double x, double y, double direction, double w, double h, Robot bulletSender, double bulletVelocity, double distanceToLive, int bulletDamage) {
         super(x, y, direction, w, h);
         this.bulletSender = bulletSender;
+        this.bulletVelocity = bulletVelocity;
+        this.distanceToLive = distanceToLive;
+        this.bulletDamage = bulletDamage;
     }
+
 
     public double getBulletVelocity() {
         return bulletVelocity;
@@ -28,6 +34,10 @@ public class Bullet extends GameObject{
 
     public double getDistanceToLive() {
         return distanceToLive;
+    }
+
+    public int getBulletDamage() {
+        return bulletDamage;
     }
 
     public void setCoveredDistance(double coveredDistance) {

@@ -22,4 +22,10 @@ public class Drawer {
     public static void drawHitBox(Graphics g, int x, int y, int w, int h) {
         g.drawRect(x, y, w, h);
     }
+
+    public static void drawLine(Graphics2D g, int x, int y, int x1, int y1, int stroke){
+        g.setStroke(new BasicStroke(stroke));
+        g.drawLine(x, y, x1, y1);
+        g.setStroke(new BasicStroke(1));
+    }
 }

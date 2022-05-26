@@ -7,6 +7,7 @@ import ru.robots.game.handlers.BotHandler;
 import ru.robots.game.handlers.BulletHandler;
 import ru.robots.game.handlers.PlayerHandler;
 import static ru.robots.game.constants.GameConstants.*;
+import static ru.robots.game.constants.BulletList.*;
 
 import ru.robots.game.inputDevicesHandlers.KeyboardParams;
 import ru.robots.game.inputDevicesHandlers.MouseParams;
@@ -44,6 +45,7 @@ public class GamePresenter {
     public void setNewKeyPressed(KeyEvent event){
         int keyCode = event.getKeyCode();
         setNewRobotMovingDirection(keyCode, true);
+        setNewGun(keyCode);
 
         gameState.getHandlerMap().put(PLAYER_HANDLER_NAME, new PlayerHandler(gameState));
     }
@@ -57,11 +59,15 @@ public class GamePresenter {
     }
 
     public void setNewMouseClicked (MouseEvent event){
-        Bullet bullet = new Bullet(getPlayer().getX(), getPlayer().getY(), getPlayer().getDirection(), 6, 3, getPlayer());
-        bullet.setDirection(getPlayer().getDirection());
+        ArrayList<Bullet> bullets = GameObjectGenerator.generateBullets(getPlayer().getTypeOfGun());
 
-        ArrayList<Bullet> bulletArrayList = getBulletArrayList();
-        bulletArrayList.add(bullet);
+        for (Bullet bullet : bullets){
+            bullet.setPosition(getPlayer().getX(), getPlayer().getY());
+            bullet.setDirection(getPlayer().getDirection() + bullet.getDirection());
+
+            ArrayList<Bullet> bulletArrayList = getBulletArrayList();
+            bulletArrayList.add(bullet);
+        }
 
         //MouseParams mouseParams = getMouseParams();
         //mouseParams.setClicked(true);
@@ -80,6 +86,13 @@ public class GamePresenter {
             case 16 -> keyboardParams.setDash(status);
         }
         gameState.setKeyboardParams(keyboardParams);
+    }
+
+    private void setNewGun(int keyCode){
+        switch (keyCode) {
+            case 49 -> getPlayer().setTypeOfGun(PISTOL);
+            case 50 -> getPlayer().setTypeOfGun(SHOTGUN);
+        }
     }
 
     public void setNewRobotDirection(MouseEvent event){

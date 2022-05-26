@@ -7,6 +7,7 @@ import ru.robots.presenter.GamePresenter;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class  GameVisualizer extends JPanel
 
     RobotDrawer robotDrawer = new RobotDrawer();
     BulletDrawer bulletDrawer = new BulletDrawer();
+    GameFieldDrawer gameFieldDrawer = new GameFieldDrawer();
 
     public GameVisualizer() {
         gamePresenter = new GamePresenter(this);
@@ -106,6 +108,8 @@ public class  GameVisualizer extends JPanel
 //        File file = new File("asset/player.png");
 //        BufferedImage image = ImageIO.read(file);
 //        g2d.drawImage(image, null, (int)player.getX(), (int)player.getY());
+
+        gameFieldDrawer.drawGameField(g2d);
 
 
         for (Bullet bullet: bulletArrayList){
