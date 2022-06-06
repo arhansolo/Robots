@@ -2,7 +2,6 @@ package ru.robots.game.commands;
 
 import ru.robots.game.inputDevicesHandlers.MouseParams;
 import ru.robots.game.gameObjects.Bullet;
-import ru.robots.game.gameObjects.Robot;
 
 public interface MoveBulletCommand extends Command{
 

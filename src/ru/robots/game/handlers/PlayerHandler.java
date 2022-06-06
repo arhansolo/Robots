@@ -8,7 +8,6 @@ import ru.robots.game.gameObjects.Robot;
 
 public class PlayerHandler implements KeyboardCommand {
     private final GameState gameState;
-
     public PlayerHandler(GameState gameState) {
         this.gameState = gameState;
     }
@@ -17,7 +16,6 @@ public class PlayerHandler implements KeyboardCommand {
     public void handleCommand(GameObjectData gameObjectData) {
         Robot robot = gameObjectData.getPlayer();
         KeyboardParams keyboardParams = gameState.getKeyboardParams();
-        System.out.println(robot.getHp());
         robot.setVelocities(1, 0.001);
         if (robot.isOutOfBorders()) {
             robot.setPosition(100,100);

@@ -17,7 +17,6 @@ public class RobotTypes {
 //    public static int PUSHER_LEVEL = 2;
 //    public static int SNIPER_LEVEL = 3;
 
-
     public static final int MAX_PLAYER_HP = 100;
     public static final int MAX_NOOB_HP = 50;
     public static final int MAX_PUSHER_HP = 150;

@@ -13,7 +13,6 @@ import java.util.Iterator;
 
 public class BulletHandler implements MoveBulletCommand {
     private final GameState gameState;
-
     public BulletHandler(GameState gameState) {
         this.gameState = gameState;
     }
@@ -34,7 +33,6 @@ public class BulletHandler implements MoveBulletCommand {
             }
         }
     }
-
     public boolean isHit(Bullet bullet, GameObjectData gameObjectData){
         ArrayList<Robot> bots = gameObjectData.getBotArrayList();
         Shape bulletBounds = bullet.getGameObjectHitBox().getBounds2D();
@@ -57,7 +55,6 @@ public class BulletHandler implements MoveBulletCommand {
         }
         return false;
     }
-
     public boolean isEnemyIntersection (Robot robot, Bullet bullet, Shape bulletBounds) {
             return  bulletBounds.intersects(robot.getGameObjectHitBox().getBounds2D())
                     && !(bullet.getBulletSender().equals(robot));

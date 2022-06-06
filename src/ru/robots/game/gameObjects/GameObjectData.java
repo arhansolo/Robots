@@ -1,8 +1,5 @@
 package ru.robots.game.gameObjects;
 
-import ru.robots.game.gameObjects.Bullet;
-import ru.robots.game.gameObjects.Robot;
-
 import java.util.ArrayList;
 
 public class GameObjectData {

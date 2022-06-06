@@ -6,7 +6,6 @@ import ru.robots.game.gameObjects.Robot;
 public interface KeyboardCommand extends Command{
 
     default void moveRobotUsingKeyboard(Robot player, KeyboardParams keyboardParams){
-
         double newX = player.getX();
         double newY = player.getY();
         double direction = player.getDirection();

@@ -20,7 +20,6 @@ public class Bullet extends GameObject{
         this.shotDelayMs = shotDelayMs;
     }
 
-
     public double getBulletVelocity() {
         return bulletVelocity;
     }

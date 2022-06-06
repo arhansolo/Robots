@@ -1,7 +1,6 @@
 package ru.robots.game.commands;
 
 import ru.robots.game.MathCalculator;
-import ru.robots.game.gameObjects.GameObject;
 import ru.robots.game.gameObjects.Robot;
 
 import static ru.robots.game.MathCalculator.*;
@@ -34,4 +33,3 @@ public interface MoveCommand extends Command{
         robot.setDirection(newDirection);
     }
 }
-//перенести CV, сделать private + сделать data class

@@ -11,10 +11,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static ru.robots.game.constants.GameParams.*;
-import static ru.robots.game.constants.Gun.SHOTGUN;
 
 public class GameObjectGenerator {
-
     private final GameState gameState;
     private final RobotTypes robotTypes = new RobotTypes();
 
@@ -43,19 +41,15 @@ public class GameObjectGenerator {
         double x = Math.random()*maxFieldCoordinateX;
         double y = Math.random()*maxFieldCoordinateY;
         double direction = Math.random()*Math.PI;
-
         robot.setPosition(x, y);
         robot.setDirection(direction);
-
         return robot;
     }
 
     private ArrayList<Bullet> generateBullets(Gun gun){
         ArrayList<Bullet> bullets = new ArrayList<>();
         String typeOfGun = gun.getTypeOfGun();
-
         Map<Gun, ArrayList<Bullet>> bulletGeneratorMap = new BulletGeneratorMap().getBulletMap();
-
         for (Gun gun_ : bulletGeneratorMap.keySet()) {
             if (gun_.getTypeOfGun().equals(typeOfGun)){
                 bullets = bulletGeneratorMap.get(gun_);
@@ -67,7 +61,6 @@ public class GameObjectGenerator {
     public void generateShot(Robot robot, ArrayList<Bullet> bulletArrayList){
         GameObjectGenerator gameObjectGenerator = new GameObjectGenerator(gameState);
         ArrayList<Bullet> bullets = gameObjectGenerator.generateBullets(robot.getGun());
-
         if (!robot.isOnReload()){
             for (Bullet bullet : bullets){
                 bullet.setBulletSender(robot);

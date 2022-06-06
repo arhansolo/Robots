@@ -24,6 +24,8 @@ public class Robot extends GameObject{
         this.hp = hp;
         this.isPlayer = isPlayer;
         this.onReload = false;
+
+        timer.schedule(setReloadTask(), 0, getGun().getShotDelay());
     }
 
     public void setVelocities (double velocity, double angularVelocity){

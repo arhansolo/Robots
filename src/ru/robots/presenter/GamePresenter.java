@@ -1,7 +1,6 @@
 package ru.robots.presenter;
 
 import ru.robots.game.*;
-import ru.robots.game.constants.Gun;
 import ru.robots.game.gameObjects.Bullet;
 import ru.robots.game.gameObjects.Robot;
 import ru.robots.game.handlers.BotHandler;
@@ -12,7 +11,7 @@ import static ru.robots.game.constants.Gun.*;
 
 import ru.robots.game.inputDevicesHandlers.KeyboardParams;
 import ru.robots.game.inputDevicesHandlers.MouseParams;
-import ru.robots.gui.gameView.GameVisualizer;
+import ru.robots.gui.gameView.visualizers.Visualizer;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -24,7 +23,7 @@ import static ru.robots.game.MathCalculator.angleTo;
 
 public class GamePresenter {
 
-    public GamePresenter(GameVisualizer visualizer){
+    public GamePresenter(Visualizer visualizer){
         visualizer.addMouseMotionEventListener(this::setNewRobotDirection);
         visualizer.addMouseEventListener(this::setNewMouseClicked);
         visualizer.addKeyPressedEventListener(this::setNewKeyPressed);
@@ -47,21 +46,18 @@ public class GamePresenter {
         int keyCode = event.getKeyCode();
         setNewRobotMovingDirection(keyCode, true);
         setNewGun(keyCode);
-
         gameState.getHandlerMap().put(PLAYER_HANDLER_NAME, new PlayerHandler(gameState));
     }
 
     public void setNewKeyReleased(KeyEvent event){
         int keyCode = event.getKeyCode();
         setNewRobotMovingDirection(keyCode, false);
-
         gameState.getHandlerMap().put(PLAYER_HANDLER_NAME, new PlayerHandler(gameState));
     }
 
     public void setNewMouseClicked (MouseEvent event){
         GameObjectGenerator gameObjectGenerator = new GameObjectGenerator(gameState);
         gameObjectGenerator.generateShot(getPlayer(), getBulletArrayList());
-
         gameState.getHandlerMap().put(BULLET_HANDLER_NAME, new BulletHandler(gameState));
     }
 
@@ -90,7 +86,6 @@ public class GamePresenter {
         Robot player = getPlayer();
         double angle = angleTo(player.getX(), player.getY(), mousePosition.x, mousePosition.y);
         player.setDirection(angle);
-
         gameState.getHandlerMap().put(BOT_HANDLER_NAME, new BotHandler(gameState));
     }
 
@@ -100,6 +95,10 @@ public class GamePresenter {
 
     public String getWavesCount(){
         return String.valueOf(gameState.getRoundNumber());
+    }
+
+    public String getKillsCount(){
+        return java.lang.String.valueOf(gameState.getKillsCount());
     }
 
     public Robot getPlayer(){

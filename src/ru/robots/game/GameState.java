@@ -19,6 +19,8 @@ public class GameState {
 
     private int roundNumber;
 
+    private int killsCount = 0;
+
     private final GameObjectGenerator gameObjectGenerator = new GameObjectGenerator(this);
 
     private KeyboardParams keyboardParams;
@@ -47,7 +49,6 @@ public class GameState {
                 handler.handleCommand(gameObjectData);
             }
         }
-
         nextRound();
     }
 
@@ -60,6 +61,14 @@ public class GameState {
             this.roundNumber++;
             gameObjectData.setBots(gameObjectGenerator.generateBots());
         }
+    }
+
+    public void increaseKillsCount() {
+        this.killsCount++;
+    }
+
+    public int getKillsCount() {
+        return killsCount;
     }
 
     public GameObjectData getGameObjectData() {

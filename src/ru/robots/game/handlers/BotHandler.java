@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class BotHandler implements MoveCommand {
     private final GameState gameState;
     private final static double ANGLE_OF_VIEW = Math.PI/18;
-
     public BotHandler(GameState gameState) {
         this.gameState = gameState;
     }
@@ -30,15 +29,14 @@ public class BotHandler implements MoveCommand {
                 Robot bot = bots.get(i);
                 if (bot.getHp() <= 0){
                     player.setHp(MAX_PLAYER_HP);
+                    gameState.increaseKillsCount();
                     bots.remove(bot);
                 }
-
                 bot.setVelocities(0.05, 0.003);
                 if (isReadyToShoot(player, bot)){
                     gameObjectGenerator.generateShot(bot, gameState.getGameObjectData().getBulletArrayList());
                     gameState.getHandlerMap().put(BULLET_HANDLER_NAME, new BulletHandler(gameState));
                 }
-
                 if (bot.isOutOfBorders()) {
                     bots.remove(bot);
                 }
