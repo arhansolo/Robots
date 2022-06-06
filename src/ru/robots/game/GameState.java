@@ -2,6 +2,7 @@ package ru.robots.game;
 
 import ru.robots.game.commands.Command;
 import ru.robots.game.gameObjects.Bullet;
+import ru.robots.game.gameObjects.GameObjectData;
 import ru.robots.game.gameObjects.Robot;
 import static ru.robots.game.constants.GameConstants.*;
 import ru.robots.game.inputDevicesHandlers.KeyboardParams;
@@ -14,14 +15,22 @@ import java.util.Map;
 public class GameState {
     private final GameObjectData gameObjectData;
 
-    private final Map<String, Command<GameObjectData>> handlerMap;
+    private final Map<String, Command> handlerMap;
+
+    private int roundNumber;
+
+    private int killsCount = 0;
+
+    private final GameObjectGenerator gameObjectGenerator = new GameObjectGenerator(this);
 
     private KeyboardParams keyboardParams;
     private MouseParams mouseParams;
 
     public GameState(){
-        Robot player = new Robot(100, 100, 0);
-        Robot bot = new Robot(0, 0, 0);
+        roundNumber = 1;
+
+        Robot player = gameObjectGenerator.generatePlayer();
+        ArrayList<Robot> bots = gameObjectGenerator.generateBots();
         ArrayList<Bullet> bulletArrayList = new ArrayList<Bullet>();
 
         handlerMap = new HashMap<>();
@@ -29,25 +38,45 @@ public class GameState {
         handlerMap.put(BOT_HANDLER_NAME, null);
         handlerMap.put(BULLET_HANDLER_NAME, null);
 
-        gameObjectData = new GameObjectData(player, bot, bulletArrayList);
+        gameObjectData = new GameObjectData(player, bots, bulletArrayList);
         keyboardParams = new KeyboardParams(false, false, false, false, false);
         //mouseParams = new MouseParams(false);
     }
 
     public void updateGameState(){
-        for (Command<GameObjectData> value : handlerMap.values()) {
-            if (value != null){
-                value.handleCommand(gameObjectData);
+        for (Command handler : handlerMap.values()) {
+            if (handler != null){
+                handler.handleCommand(gameObjectData);
             }
+        }
+        nextRound();
+    }
+
+    public Map<String, Command> getHandlerMap() {
+        return handlerMap;
+    }
+
+    public void nextRound(){
+        if (gameObjectData.getBotArrayList().size() == 0){
+            this.roundNumber++;
+            gameObjectData.setBots(gameObjectGenerator.generateBots());
         }
     }
 
-    public Map<String, Command<GameObjectData>> getHandlerMap() {
-        return handlerMap;
+    public void increaseKillsCount() {
+        this.killsCount++;
+    }
+
+    public int getKillsCount() {
+        return killsCount;
     }
 
     public GameObjectData getGameObjectData() {
         return gameObjectData;
+    }
+
+    public int getRoundNumber() {
+        return roundNumber;
     }
 
     public MouseParams getMouseParams() {

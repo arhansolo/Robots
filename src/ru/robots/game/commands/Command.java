@@ -1,5 +1,7 @@
 package ru.robots.game.commands;
 
-public interface Command<T> {
-    void handleCommand(T t);
+import ru.robots.game.gameObjects.GameObjectData;
+
+public interface Command {
+    void handleCommand(GameObjectData gameObjectData);
 }

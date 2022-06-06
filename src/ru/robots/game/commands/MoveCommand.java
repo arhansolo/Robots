@@ -1,14 +1,13 @@
 package ru.robots.game.commands;
 
 import ru.robots.game.MathCalculator;
-import ru.robots.game.gameObjects.GameObject;
 import ru.robots.game.gameObjects.Robot;
 
 import static ru.robots.game.MathCalculator.*;
 
-public class MoveCommand {
+public interface MoveCommand extends Command{
 
-    public static void moveRobot(Robot robot, double m_targetPositionX, double m_targetPositionY, double duration) {
+    default void moveRobot(Robot robot, double m_targetPositionX, double m_targetPositionY, double duration) {
         double[] velocities = computeVelocities(robot, m_targetPositionX, m_targetPositionY);
         if (velocities == null) {
             return;
@@ -34,4 +33,3 @@ public class MoveCommand {
         robot.setDirection(newDirection);
     }
 }
-//перенести CV, сделать private + сделать data class

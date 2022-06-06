@@ -9,18 +9,23 @@ import static ru.robots.gui.gameView.Drawer.*;
 
 public class RobotDrawer{
 
-    public void drawRobot(Graphics2D g, int x, int y, double direction, Robot robot) {
+    public void drawRobot(Graphics2D g, Robot robot) {
+        double direction = robot.getDirection();
         int robotCenterX = round(robot.getX());
         int robotCenterY = round(robot.getY());
         AffineTransform t = AffineTransform.getRotateInstance(direction, robotCenterX, robotCenterY);
         g.setTransform(t);
-        g.setColor(Color.MAGENTA);
-        fillOval(g, robotCenterX, robotCenterY, 30, 10);
+
+        Color robotColor = (robot.isPlayer()) ? Color.CYAN : Color.MAGENTA;
+        g.setColor(robotColor);
+        fillHitBox(g, robotCenterX - round(robot.getWidth()/2), robotCenterY - round(robot.getHeight()/2), round(robot.getWidth()), round(robot.getHeight()));
         g.setColor(Color.BLACK);
-        drawOval(g, robotCenterX, robotCenterY, 30, 10);
+        drawHitBox(g, robotCenterX - round(robot.getWidth()/2), robotCenterY - round(robot.getHeight()/2), round(robot.getWidth()), round(robot.getHeight()));
+
         g.setColor(Color.WHITE);
-        fillOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
+        fillOval(g, robotCenterX, robotCenterY, 5, 5);
         g.setColor(Color.BLACK);
-        drawOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
+        drawOval(g, robotCenterX, robotCenterY, 5, 5);
+
     }
 }

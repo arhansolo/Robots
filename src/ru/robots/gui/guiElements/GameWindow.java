@@ -1,6 +1,7 @@
 package ru.robots.gui.guiElements;
 
-import ru.robots.gui.gameView.GameVisualizer;
+import ru.robots.gui.gameView.visualizers.GameInfVisualizer;
+import ru.robots.gui.gameView.visualizers.GameVisualizer;
 
 import java.awt.*;
 
@@ -10,13 +11,19 @@ import javax.swing.*;
 
 public class GameWindow extends JInternalFrame
 {
-    private final GameVisualizer m_visualizer;
+    private final GameVisualizer gameVisualizer;
+    //private final GameInfVisualizer gameInfVisualizer;
 
     public GameWindow() {
         super(NAME_OF_GAME_WINDOW, true, true, true, true);
-        m_visualizer = new GameVisualizer();
+        gameVisualizer = new GameVisualizer();
+        //gameInfVisualizer = new GameInfVisualizer();
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(m_visualizer, BorderLayout.CENTER);
+
+       // panel.add(gameInfVisualizer, BorderLayout.NORTH);
+        panel.add(gameVisualizer, BorderLayout.CENTER);
+
+
         getContentPane().add(panel);
         pack();
     }

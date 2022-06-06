@@ -7,10 +7,11 @@ import ru.robots.game.handlers.BotHandler;
 import ru.robots.game.handlers.BulletHandler;
 import ru.robots.game.handlers.PlayerHandler;
 import static ru.robots.game.constants.GameConstants.*;
+import static ru.robots.game.constants.Gun.*;
 
 import ru.robots.game.inputDevicesHandlers.KeyboardParams;
 import ru.robots.game.inputDevicesHandlers.MouseParams;
-import ru.robots.gui.gameView.GameVisualizer;
+import ru.robots.gui.gameView.visualizers.Visualizer;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -22,7 +23,7 @@ import static ru.robots.game.MathCalculator.angleTo;
 
 public class GamePresenter {
 
-    public GamePresenter(GameVisualizer visualizer){
+    public GamePresenter(Visualizer visualizer){
         visualizer.addMouseMotionEventListener(this::setNewRobotDirection);
         visualizer.addMouseEventListener(this::setNewMouseClicked);
         visualizer.addKeyPressedEventListener(this::setNewKeyPressed);
@@ -44,29 +45,19 @@ public class GamePresenter {
     public void setNewKeyPressed(KeyEvent event){
         int keyCode = event.getKeyCode();
         setNewRobotMovingDirection(keyCode, true);
-
+        setNewGun(keyCode);
         gameState.getHandlerMap().put(PLAYER_HANDLER_NAME, new PlayerHandler(gameState));
     }
 
     public void setNewKeyReleased(KeyEvent event){
         int keyCode = event.getKeyCode();
         setNewRobotMovingDirection(keyCode, false);
-
-        PlayerHandler playerHandler = new PlayerHandler(gameState);
         gameState.getHandlerMap().put(PLAYER_HANDLER_NAME, new PlayerHandler(gameState));
     }
 
     public void setNewMouseClicked (MouseEvent event){
-        Bullet bullet = new Bullet(getPlayer().getX(), getPlayer().getY(), getPlayer().getDirection());
-        bullet.setDirection(getPlayer().getDirection());
-
-        ArrayList<Bullet> bulletArrayList = getBulletArrayList();
-        bulletArrayList.add(bullet);
-
-        //MouseParams mouseParams = getMouseParams();
-        //mouseParams.setClicked(true);
-        //gameState.setMouseParams(mouseParams);
-
+        GameObjectGenerator gameObjectGenerator = new GameObjectGenerator(gameState);
+        gameObjectGenerator.generateShot(getPlayer(), getBulletArrayList());
         gameState.getHandlerMap().put(BULLET_HANDLER_NAME, new BulletHandler(gameState));
     }
 
@@ -82,13 +73,32 @@ public class GamePresenter {
         gameState.setKeyboardParams(keyboardParams);
     }
 
+    private void setNewGun(int keyCode){
+        switch (keyCode) {
+            case 49 -> getPlayer().setGun(PISTOL);
+            case 50 -> getPlayer().setGun(SHOTGUN);
+            case 51 -> getPlayer().setGun(SNIPER_RIFLE);
+        }
+    }
+
     public void setNewRobotDirection(MouseEvent event){
         Point mousePosition = event.getPoint();
         Robot player = getPlayer();
         double angle = angleTo(player.getX(), player.getY(), mousePosition.x, mousePosition.y);
         player.setDirection(angle);
-
         gameState.getHandlerMap().put(BOT_HANDLER_NAME, new BotHandler(gameState));
+    }
+
+    public boolean gameIsFinished(){
+        return getPlayer().getHp() <= 0;
+    }
+
+    public String getWavesCount(){
+        return String.valueOf(gameState.getRoundNumber());
+    }
+
+    public String getKillsCount(){
+        return java.lang.String.valueOf(gameState.getKillsCount());
     }
 
     public Robot getPlayer(){
@@ -107,7 +117,7 @@ public class GamePresenter {
         return gameState.getMouseParams();
     }
 
-    public Robot getBot(){
-        return gameState.getGameObjectData().getBot();
+    public ArrayList<Robot> getBotArrayList(){
+        return gameState.getGameObjectData().getBotArrayList();
     }
 }
