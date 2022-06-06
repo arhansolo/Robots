@@ -2,6 +2,7 @@ package ru.robots.game;
 
 import ru.robots.game.commands.Command;
 import ru.robots.game.gameObjects.Bullet;
+import ru.robots.game.gameObjects.GameObjectData;
 import ru.robots.game.gameObjects.Robot;
 import static ru.robots.game.constants.GameConstants.*;
 import ru.robots.game.inputDevicesHandlers.KeyboardParams;
@@ -16,11 +17,15 @@ public class GameState {
 
     private final Map<String, Command> handlerMap;
 
+    private int roundNumber;
+
+    private final GameObjectGenerator gameObjectGenerator = new GameObjectGenerator(this);
+
     private KeyboardParams keyboardParams;
     private MouseParams mouseParams;
 
     public GameState(){
-        GameObjectGenerator gameObjectGenerator = new GameObjectGenerator();
+        roundNumber = 1;
 
         Robot player = gameObjectGenerator.generatePlayer();
         ArrayList<Robot> bots = gameObjectGenerator.generateBots();
@@ -42,14 +47,27 @@ public class GameState {
                 handler.handleCommand(gameObjectData);
             }
         }
+
+        nextRound();
     }
 
     public Map<String, Command> getHandlerMap() {
         return handlerMap;
     }
 
+    public void nextRound(){
+        if (gameObjectData.getBotArrayList().size() == 0){
+            this.roundNumber++;
+            gameObjectData.setBots(gameObjectGenerator.generateBots());
+        }
+    }
+
     public GameObjectData getGameObjectData() {
         return gameObjectData;
+    }
+
+    public int getRoundNumber() {
+        return roundNumber;
     }
 
     public MouseParams getMouseParams() {

@@ -1,25 +1,29 @@
 package ru.robots.game.gameObjects;
-import static ru.robots.game.constants.BulletList.*;
+import ru.robots.game.constants.Gun;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Robot extends GameObject{
-
     private final boolean isPlayer;
 
     private double maxVelocity;
     private double maxAngularVelocity;
 
     private int hp;
-    private int abilityCharge;
-    private String typeOfGun;
+    private Gun gun;
+    private boolean onReload;
 
     private final double dashDistance = 40;
 
-    public Robot(double x, double y, double direction, double w, double h, boolean isPlayer) {
+    private Timer timer = new Timer("Shot delay", true);
+
+    public Robot(double x, double y, double direction, double w, double h, int hp, boolean isPlayer, Gun gun) {
         super(x, y, direction, w, h);
-        this.typeOfGun = PISTOL;
-        this.hp = 100;
-        this.abilityCharge = 3;
+        this.gun = gun;
+        this.hp = hp;
         this.isPlayer = isPlayer;
+        this.onReload = false;
     }
 
     public void setVelocities (double velocity, double angularVelocity){
@@ -27,20 +31,46 @@ public class Robot extends GameObject{
         this.maxAngularVelocity = angularVelocity;
     }
 
+    private TimerTask setReloadTask() {
+        return new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                setOnReload(false);
+            }
+        };
+    }
+
     public void setHp(int hp){
         this.hp = hp;
     }
 
-    public void setAbilityCharge (int abilityCharge){
-        this.abilityCharge = abilityCharge;
+    public void setGun(Gun gun) {
+        this.gun = gun;
+        setTimer();
     }
 
-    public void setTypeOfGun(String typeOfGun) {
-        this.typeOfGun = typeOfGun;
+    private void setTimer() {
+        timer.cancel();
+        timer = new Timer("Shot delay", true);
+        timer.schedule(setReloadTask(), 0, getGun().getShotDelay());
+    }
+
+    public void setOnReload(boolean onReload) {
+        this.onReload = onReload;
+    }
+
+    public boolean isOnReload() {
+        return onReload;
     }
 
     public boolean isPlayer() {
         return isPlayer;
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 
     public double getMaxVelocity() {
@@ -55,12 +85,8 @@ public class Robot extends GameObject{
         return hp;
     }
 
-    public String getTypeOfGun() {
-        return typeOfGun;
-    }
-
-    public int getAbilityCharge() {
-        return abilityCharge;
+    public Gun getGun() {
+        return gun;
     }
 
     public double getDashDistance() {

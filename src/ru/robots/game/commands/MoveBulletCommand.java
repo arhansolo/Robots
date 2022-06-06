@@ -4,9 +4,9 @@ import ru.robots.game.inputDevicesHandlers.MouseParams;
 import ru.robots.game.gameObjects.Bullet;
 import ru.robots.game.gameObjects.Robot;
 
-public interface ShootCommand extends Command{
+public interface MoveBulletCommand extends Command{
 
-    default void shoot (Bullet bullet, MouseParams mouseParams, Robot player){
+    default void moveBullet(Bullet bullet, MouseParams mouseParams){
 
         double newX = bullet.getX();
         double newY = bullet.getY();

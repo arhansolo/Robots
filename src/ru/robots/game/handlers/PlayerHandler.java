@@ -1,6 +1,6 @@
 package ru.robots.game.handlers;
 
-import ru.robots.game.GameObjectData;
+import ru.robots.game.gameObjects.GameObjectData;
 import ru.robots.game.GameState;
 import ru.robots.game.commands.KeyboardCommand;
 import ru.robots.game.inputDevicesHandlers.KeyboardParams;
@@ -17,8 +17,8 @@ public class PlayerHandler implements KeyboardCommand {
     public void handleCommand(GameObjectData gameObjectData) {
         Robot robot = gameObjectData.getPlayer();
         KeyboardParams keyboardParams = gameState.getKeyboardParams();
+        System.out.println(robot.getHp());
         robot.setVelocities(1, 0.001);
-
         if (robot.isOutOfBorders()) {
             robot.setPosition(100,100);
             robot.setDirection(0);

@@ -1,59 +1,82 @@
 package ru.robots.game;
 
+import ru.robots.game.constants.RobotTypes;
+import ru.robots.game.constants.BulletGeneratorMap;
+import ru.robots.game.constants.Gun;
 import ru.robots.game.gameObjects.Bullet;
 import ru.robots.game.gameObjects.Robot;
-import static ru.robots.game.constants.BulletList.*;
+
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.Map;
 
 import static ru.robots.game.constants.GameParams.*;
+import static ru.robots.game.constants.Gun.SHOTGUN;
 
 public class GameObjectGenerator {
 
+    private final GameState gameState;
+    private final RobotTypes robotTypes = new RobotTypes();
+
+    public GameObjectGenerator(GameState gameState) {
+        this.gameState = gameState;
+    }
+
     public ArrayList<Robot> generateBots(){
         ArrayList<Robot> bots = new ArrayList<Robot>();
-        for (int i = 0; i < 3; i++){
-            bots.add(getRobotWithRandomCoordinates());
-        }
+        int roundDif = gameState.getRoundNumber() * 2;
 
+        while (roundDif >= 0){
+            int random = (int )(Math.random() * 3 + 1);
+            roundDif -= random;
+            Robot bot = robotTypes.getRobot(random);
+            bots.add(setRandomCoordinates(bot));
+        }
         return bots;
     }
 
     public Robot generatePlayer(){
-        Robot player = new Robot(100, 100, 0, 30, 20, true);
-        return player;
+        return robotTypes.getPlayer();
     }
 
-    public Robot getRobotWithRandomCoordinates() {
+    private Robot setRandomCoordinates(Robot robot) {
         double x = Math.random()*maxFieldCoordinateX;
         double y = Math.random()*maxFieldCoordinateY;
         double direction = Math.random()*Math.PI;
-        return new Robot(x, y, direction, 30, 20, false);
+
+        robot.setPosition(x, y);
+        robot.setDirection(direction);
+
+        return robot;
     }
 
-    public static ArrayList<Bullet> generateBullets(String typeOfGun){
+    private ArrayList<Bullet> generateBullets(Gun gun){
         ArrayList<Bullet> bullets = new ArrayList<>();
+        String typeOfGun = gun.getTypeOfGun();
 
-        if (typeOfGun.equals(PISTOL)){
-            bullets = generatePistolBullets();
-        }
+        Map<Gun, ArrayList<Bullet>> bulletGeneratorMap = new BulletGeneratorMap().getBulletMap();
 
-        if (typeOfGun.equals(SHOTGUN)){
-            bullets =  generateShotgunBullets();
+        for (Gun gun_ : bulletGeneratorMap.keySet()) {
+            if (gun_.getTypeOfGun().equals(typeOfGun)){
+                bullets = bulletGeneratorMap.get(gun_);
+            }
         }
         return bullets;
     }
 
-    private static ArrayList<Bullet> generatePistolBullets() {
-        return new ArrayList<>(Collections.singletonList(new Bullet(0, 0, 0, 6, 3, null, PISTOL_BULLET_VELOCITY, PISTOL_DTL, PISTOL_DAMAGE)));
-    }
+    public void generateShot(Robot robot, ArrayList<Bullet> bulletArrayList){
+        GameObjectGenerator gameObjectGenerator = new GameObjectGenerator(gameState);
+        ArrayList<Bullet> bullets = gameObjectGenerator.generateBullets(robot.getGun());
 
-    private static ArrayList<Bullet> generateShotgunBullets(){
-        return new ArrayList<>(Arrays.asList(new Bullet(0, 0, 0, 6, 3, null, SHOTGUN_BULLET_VELOCITY, SHOTGUN_DTL, SHOTGUN_DAMAGE),
-                new Bullet(0, 0, SHOTGUN_BULLET_ANGLE, 6, 3, null, SHOTGUN_BULLET_VELOCITY, SHOTGUN_DTL, SHOTGUN_DAMAGE),
-                new Bullet(0, 0, -SHOTGUN_BULLET_ANGLE, 6, 3, null, SHOTGUN_BULLET_VELOCITY, SHOTGUN_DTL, SHOTGUN_DAMAGE)));
-    }
+        if (!robot.isOnReload()){
+            for (Bullet bullet : bullets){
+                bullet.setBulletSender(robot);
+                bullet.setPosition(robot.getX(), robot.getY());
+                bullet.setDirection(robot.getDirection() + bullet.getDirection());
 
+                bulletArrayList.add(bullet);
+            }
+            robot.setOnReload(true);
+        }
+    }
 }

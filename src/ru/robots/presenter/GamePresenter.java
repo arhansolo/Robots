@@ -1,13 +1,14 @@
 package ru.robots.presenter;
 
 import ru.robots.game.*;
+import ru.robots.game.constants.Gun;
 import ru.robots.game.gameObjects.Bullet;
 import ru.robots.game.gameObjects.Robot;
 import ru.robots.game.handlers.BotHandler;
 import ru.robots.game.handlers.BulletHandler;
 import ru.robots.game.handlers.PlayerHandler;
 import static ru.robots.game.constants.GameConstants.*;
-import static ru.robots.game.constants.BulletList.*;
+import static ru.robots.game.constants.Gun.*;
 
 import ru.robots.game.inputDevicesHandlers.KeyboardParams;
 import ru.robots.game.inputDevicesHandlers.MouseParams;
@@ -54,24 +55,12 @@ public class GamePresenter {
         int keyCode = event.getKeyCode();
         setNewRobotMovingDirection(keyCode, false);
 
-        PlayerHandler playerHandler = new PlayerHandler(gameState);
         gameState.getHandlerMap().put(PLAYER_HANDLER_NAME, new PlayerHandler(gameState));
     }
 
     public void setNewMouseClicked (MouseEvent event){
-        ArrayList<Bullet> bullets = GameObjectGenerator.generateBullets(getPlayer().getTypeOfGun());
-
-        for (Bullet bullet : bullets){
-            bullet.setPosition(getPlayer().getX(), getPlayer().getY());
-            bullet.setDirection(getPlayer().getDirection() + bullet.getDirection());
-
-            ArrayList<Bullet> bulletArrayList = getBulletArrayList();
-            bulletArrayList.add(bullet);
-        }
-
-        //MouseParams mouseParams = getMouseParams();
-        //mouseParams.setClicked(true);
-        //gameState.setMouseParams(mouseParams);
+        GameObjectGenerator gameObjectGenerator = new GameObjectGenerator(gameState);
+        gameObjectGenerator.generateShot(getPlayer(), getBulletArrayList());
 
         gameState.getHandlerMap().put(BULLET_HANDLER_NAME, new BulletHandler(gameState));
     }
@@ -90,8 +79,9 @@ public class GamePresenter {
 
     private void setNewGun(int keyCode){
         switch (keyCode) {
-            case 49 -> getPlayer().setTypeOfGun(PISTOL);
-            case 50 -> getPlayer().setTypeOfGun(SHOTGUN);
+            case 49 -> getPlayer().setGun(PISTOL);
+            case 50 -> getPlayer().setGun(SHOTGUN);
+            case 51 -> getPlayer().setGun(SNIPER_RIFLE);
         }
     }
 
@@ -102,6 +92,14 @@ public class GamePresenter {
         player.setDirection(angle);
 
         gameState.getHandlerMap().put(BOT_HANDLER_NAME, new BotHandler(gameState));
+    }
+
+    public boolean gameIsFinished(){
+        return getPlayer().getHp() <= 0;
+    }
+
+    public String getWavesCount(){
+        return String.valueOf(gameState.getRoundNumber());
     }
 
     public Robot getPlayer(){

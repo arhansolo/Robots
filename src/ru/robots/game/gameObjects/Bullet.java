@@ -4,19 +4,20 @@ public class Bullet extends GameObject{
     private final double bulletVelocity;
     private final double distanceToLive;
 
-    private final Robot bulletSender;
+    private Robot bulletSender;
 
-    private String typeOfBullet;
     private double coveredDistance;
 
     private final int bulletDamage;
 
-    public Bullet (double x, double y, double direction, double w, double h, Robot bulletSender, double bulletVelocity, double distanceToLive, int bulletDamage) {
+    private final int shotDelayMs;
+
+    public Bullet (double x, double y, double direction, double w, double h, double bulletVelocity, double distanceToLive, int bulletDamage, int shotDelayMs) {
         super(x, y, direction, w, h);
-        this.bulletSender = bulletSender;
         this.bulletVelocity = bulletVelocity;
         this.distanceToLive = distanceToLive;
         this.bulletDamage = bulletDamage;
+        this.shotDelayMs = shotDelayMs;
     }
 
 
@@ -38,6 +39,10 @@ public class Bullet extends GameObject{
 
     public int getBulletDamage() {
         return bulletDamage;
+    }
+
+    public void setBulletSender(Robot bulletSender) {
+        this.bulletSender = bulletSender;
     }
 
     public void setCoveredDistance(double coveredDistance) {

@@ -10,13 +10,14 @@ import javax.swing.*;
 
 public class GameWindow extends JInternalFrame
 {
-    private final GameVisualizer m_visualizer;
+    private final GameVisualizer gameVisualizer;
 
     public GameWindow() {
         super(NAME_OF_GAME_WINDOW, true, true, true, true);
-        m_visualizer = new GameVisualizer();
+        gameVisualizer = new GameVisualizer();
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(m_visualizer, BorderLayout.CENTER);
+        panel.add(gameVisualizer, BorderLayout.CENTER);
+        //panel.add(new GameOverPanel(), BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();
     }
