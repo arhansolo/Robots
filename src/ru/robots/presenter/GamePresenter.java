@@ -94,7 +94,7 @@ public class GamePresenter {
     }
 
     public String getWavesCount(){
-        return String.valueOf(gameState.getRoundNumber());
+        return String.valueOf(gameState.getRoundNumber() - 1);
     }
 
     public String getKillsCount(){

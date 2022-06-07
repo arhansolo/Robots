@@ -48,6 +48,18 @@ public class GameVisualizer extends Visualizer
         return aString;
     }
 
+    private void printGameStat(Graphics g){
+        super.paintComponent(g);
+        Font font = new Font("", Font.BOLD, 14);
+        g.drawString(getAttributedString("Здоровье: " + gamePresenter.getPlayer().getHp(), font).getIterator(), 0, 20);
+        g.drawString(getAttributedString("Тип оружия: " + gamePresenter.getPlayer().getGun().getTypeOfGun(), font).getIterator(), 200, 20);
+    }
+
+    @Override
+    public void paintComponent(Graphics g){
+        printGameStat(g);
+    }
+
     @Override
     public void paint(Graphics g) {
         if (isGameFinished()){
